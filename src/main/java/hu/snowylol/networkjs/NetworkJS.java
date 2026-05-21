@@ -55,24 +55,27 @@ public class NetworkJS {
     public static void checkSingleplayerAndWarn() {
         try {
             MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-            if (server != null) {
-                    // Singleplayer mode - keep registry disabled and show warning
-                    singleplayerWarningShown = true;
-                    String warning = "&c[NetworkJS] &eWARNING: Running in singleplayer mode! " +
-                                   "Network features like fetch, Discord, and server bindings are disabled by default for your safety, " +
-                                   "as these scripts can execute potentially unsafe network operations on your computer. " +
-                                   "Use &f/networkjs enable &eto enable them if you understand the risks.";
-                    
-                    LOGGER.warn("NetworkJS detected singleplayer mode - registry disabled by default");
-                    
-                    // Since Dedicated servers doenst get this, and singleplayer only loads if you join a world this is actually working
-                    scheduler.schedule(() -> {
-                        sendWarningToChat(warning);
-                    }, 3, TimeUnit.SECONDS);
-            } else if (server instanceof DedicatedServer && !registryEnabled) {
-                    // Dedicated server - enable registry automatically
+            if (server == null) {
+                return;
+            }
+
+            if (server instanceof DedicatedServer) {
+                if (!registryEnabled) {
                     registryEnabled = true;
                     LOGGER.info("NetworkJS detected dedicated server - registry enabled automatically");
+                }
+                return;
+            }
+
+            if (server instanceof IntegratedServer && !singleplayerWarningShown) {
+                singleplayerWarningShown = true;
+                String warning = "&c[NetworkJS] &eWARNING: Running in singleplayer mode! " +
+                        "Network features like fetch, Discord, and server bindings are disabled by default for your safety, " +
+                        "as these scripts can execute potentially unsafe network operations on your computer. " +
+                        "Use &f/networkjs enable &eto enable them if you understand the risks.";
+
+                LOGGER.warn("NetworkJS detected singleplayer mode - registry disabled by default");
+                scheduler.schedule(() -> sendWarningToChat(warning), 3, TimeUnit.SECONDS);
             }
         } catch (Exception e) {
             LOGGER.error("Failed to check singleplayer status: " + e.getMessage());

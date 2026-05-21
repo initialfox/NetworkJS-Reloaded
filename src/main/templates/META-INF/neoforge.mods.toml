@@ -90,7 +90,7 @@ description='''${mod_description}'''
 [[dependencies.${mod_id}]]
     modId="kubejs"
     type="required"
-    versionRange="[2101.7.1,)"
+    versionRange="${kubejs_version_range}"
     ordering="AFTER"
     side="BOTH"
 

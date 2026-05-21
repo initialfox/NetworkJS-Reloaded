@@ -12,13 +12,11 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 public class NetworkJSNeoForge {
     public NetworkJSNeoForge(IEventBus modEventBus, ModContainer modContainer) {
         NetworkJS.init();
-        
-        // Register command
-        NeoForge.EVENT_BUS.addListener(this::onRegisterCommands);
-        
-        // Handle server lifecycle
-        NeoForge.EVENT_BUS.addListener(this::onServerStarting);
-        NeoForge.EVENT_BUS.addListener(this::onServerStopping);
+
+        var neoForgeBus = NeoForge.EVENT_BUS;
+        neoForgeBus.addListener(this::onRegisterCommands);
+        neoForgeBus.addListener(this::onServerStarting);
+        neoForgeBus.addListener(this::onServerStopping);
     }
     
     private void onRegisterCommands(RegisterCommandsEvent event) {
