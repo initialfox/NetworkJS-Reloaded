@@ -6,10 +6,13 @@ PostgreSQL from KubeJS (HikariCP pool, async queries).
 
 ## Setup
 
-1. Copy `config/networkjs/postgres.json.example` → `kubejs/config/networkjs/postgres.json`
+1. Copy `postgres.json.example` → **`<server root>/kubejs/config/networkjs/postgres.json`**  
+   (folder with `mods/`, not `world/.../kubejs/`)
 2. Set `host`, `database`, `username`, `password`, `"enabled": true`
 3. Restart the server or run `/networkjs postgres reload`
 4. In singleplayer: `/networkjs enable`
+
+KubeJS scripts using `postgresQuery` may live in server-root `kubejs/server_scripts/` (all worlds) or `<world>/kubejs/server_scripts/` (one world).
 
 ## KubeJS API
 

@@ -52,6 +52,43 @@ Same as the table above:
 4. **Singleplayer:** run `/networkjs enable`, then `/kubejs reload server`.
 5. **Dedicated:** registry is enabled automatically.
 
+## Where to put KubeJS files
+
+NetworkJS follows KubeJS layout: scripts can live at **server (instance) root** and/or **per world**.
+
+### Whole server (recommended for dedicated)
+
+Root folder contains `mods/`, `config/`, `world/` (or your server root):
+
+```
+<server root>/
+  kubejs/
+    server_scripts/              ← scripts for all worlds
+    config/networkjs/
+      postgres.json              ← PostgreSQL config (only here!)
+```
+
+### Single world only
+
+Inside the world save folder (e.g. `world/` or `saves/MyWorld/`):
+
+```
+<world folder>/
+  kubejs/
+    server_scripts/              ← active while this world is loaded
+```
+
+> **PostgreSQL:** `postgres.json` is read only from `<server root>/kubejs/config/networkjs/` (game/instance directory), **not** from a world's `kubejs` folder.
+
+### Singleplayer
+
+| What | Path |
+|------|------|
+| Server-wide scripts & config | `<instance>/kubejs/` (next to `mods`, `saves`) |
+| World-only scripts | `<instance>/saves/<world name>/kubejs/server_scripts/` |
+
+Then run `/kubejs reload server` (and `/networkjs enable` in singleplayer).
+
 ## Safety & commands
 
 | Command | Description |
@@ -87,7 +124,7 @@ See: [`examples/kubejs/server_scripts/networkjs_http_fetch_example.js`](examples
 ### PostgreSQL
 
 1. Copy [`examples/kubejs/config/networkjs/postgres.json.example`](examples/kubejs/config/networkjs/postgres.json.example)  
-   → `kubejs/config/networkjs/postgres.json`
+   → `<server root>/kubejs/config/networkjs/postgres.json` (not inside a world folder)
 2. Set `"enabled": true`, host, database, credentials.
 3. `/networkjs postgres reload`
 4. Use in scripts:
@@ -161,7 +198,7 @@ examples/kubejs/
 └── postgres/README.md
 ```
 
-Copy scripts into `<world>/kubejs/server_scripts/` on your server.
+Copy scripts into `<server root>/kubejs/server_scripts/` and/or `<world folder>/kubejs/server_scripts/`.
 
 ---
 

@@ -1,8 +1,7 @@
 // NetworkJS PostgreSQL — пример
-// 1. Скопируй postgres.json.example → kubejs/config/networkjs/postgres.json
-// 2. /networkjs enable  (singleplayer)
-// 3. /networkjs postgres reload
-// 4. /kubejs reload server
+// Скрипт: <корень сервера>/kubejs/server_scripts/  или  <мир>/kubejs/server_scripts/
+// Конфиг:  <корень сервера>/kubejs/config/networkjs/postgres.json  (не в папку мира!)
+// 1. /networkjs enable  (одиночка)  2. /networkjs postgres reload  3. /kubejs reload server
 
 // SELECT (async) — параметры через ? как в JDBC
 PlayerEvents.loggedIn(function (event) {

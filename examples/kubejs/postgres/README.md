@@ -6,10 +6,13 @@
 
 ## Установка
 
-1. Скопируйте `config/networkjs/postgres.json.example` → `kubejs/config/networkjs/postgres.json`
+1. Скопируйте `postgres.json.example` → **`<корень сервера>/kubejs/config/networkjs/postgres.json`**  
+   (корень с `mods/`, не папка мира `world/.../kubejs/`)
 2. Укажите `host`, `database`, `username`, `password`, `"enabled": true`
 3. Перезапустите сервер или `/networkjs postgres reload`
 4. В одиночке: `/networkjs enable`
+
+Скрипты KubeJS с `postgresQuery` можно класть в корневой `kubejs/server_scripts/` (весь сервер) или в `<мир>/kubejs/server_scripts/` (один мир).
 
 ## API
 

@@ -52,6 +52,43 @@
 4. **Одиночка:** `/networkjs enable`, затем `/kubejs reload server`.
 5. **Dedicated:** реестр включается автоматически.
 
+## Куда класть файлы KubeJS
+
+NetworkJS работает там же, где KubeJS: скрипты можно класть **на весь сервер** и/или **на конкретный мир**.
+
+### На весь сервер (рекомендуется для dedicated)
+
+Корень — папка с `mods/`, `config/`, `world/` (или ваш `server.properties`):
+
+```
+<корень сервера>/
+  kubejs/
+    server_scripts/              ← скрипты для всех миров
+    config/networkjs/
+      postgres.json              ← конфиг PostgreSQL (только здесь!)
+```
+
+### Только для одного мира
+
+Скрипты в папке сохранения мира (например `world/` или `saves/MyWorld/`):
+
+```
+<папка мира>/
+  kubejs/
+    server_scripts/              ← действуют, пока загружен этот мир
+```
+
+> **PostgreSQL:** `postgres.json` читается только из `<корень сервера>/kubejs/config/networkjs/` (корень игры / instance), **не** из `kubejs` внутри папки мира.
+
+### Одиночная игра
+
+| Что | Путь |
+|-----|------|
+| Скрипты и конфиг «на сервер» | `<instance>/kubejs/` (рядом с `mods`, `saves`) |
+| Скрипты «на мир» | `<instance>/saves/<имя мира>/kubejs/server_scripts/` |
+
+После копирования: `/kubejs reload server` (и `/networkjs enable` в одиночке).
+
 ## Команды и безопасность
 
 | Команда | Описание |
@@ -87,7 +124,7 @@ fetchAsync('https://api.example.com', {
 ### PostgreSQL
 
 1. Скопируйте [`examples/kubejs/config/networkjs/postgres.json.example`](examples/kubejs/config/networkjs/postgres.json.example)  
-   → `kubejs/config/networkjs/postgres.json`
+   → `<корень сервера>/kubejs/config/networkjs/postgres.json` (не в папку мира)
 2. Укажите `"enabled": true`, хост, БД, логин/пароль.
 3. `/networkjs postgres reload`
 4. В скриптах:
@@ -159,7 +196,7 @@ examples/kubejs/
 └── postgres/README.md
 ```
 
-Скопируйте `.js` в `<мир>/kubejs/server_scripts/`.
+Скопируйте `.js` в `<корень сервера>/kubejs/server_scripts/` и/или `<папка мира>/kubejs/server_scripts/`.
 
 ---
 

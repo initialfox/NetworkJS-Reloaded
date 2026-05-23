@@ -1,5 +1,5 @@
 // NetworkJS — HTTP (fetch) example
-// Copy to: <server>/kubejs/server_scripts/
+// Copy to: <server root>/kubejs/server_scripts/  and/or  <world>/kubejs/server_scripts/
 // Singleplayer: /networkjs enable → /kubejs reload server
 
 const STATUS_URL = 'https://httpbin.org/get'
