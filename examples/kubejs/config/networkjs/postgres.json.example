@@ -1,0 +1,10 @@
+{
+  "enabled": true,
+  "host": "localhost",
+  "port": 5432,
+  "database": "skyforce",
+  "username": "postgres",
+  "password": "CHANGE_ME",
+  "maxPoolSize": 5,
+  "connectionTimeoutMs": 10000
+}

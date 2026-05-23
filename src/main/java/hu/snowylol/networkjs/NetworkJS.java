@@ -70,7 +70,7 @@ public class NetworkJS {
             if (server instanceof IntegratedServer && !singleplayerWarningShown) {
                 singleplayerWarningShown = true;
                 String warning = "&c[NetworkJS] &eWARNING: Running in singleplayer mode! " +
-                        "Network features like fetch, Discord, and server bindings are disabled by default for your safety, " +
+                        "Network features (fetch, Discord, PostgreSQL, server bindings) are disabled by default for your safety, " +
                         "as these scripts can execute potentially unsafe network operations on your computer. " +
                         "Use &f/networkjs enable &eto enable them if you understand the risks.";
 
