@@ -2,11 +2,23 @@
 
 [Русская версия](README.ru.md)
 
-KubeJS addon for **NeoForge 1.21.1**: HTTP requests, Discord bot, PostgreSQL, and server utilities — directly from your `kubejs/server_scripts`.
+KubeJS addon for **Minecraft 1.21.1 + NeoForge**: HTTP requests, Discord bot, PostgreSQL, and server utilities — directly from your `kubejs/server_scripts`.
 
 Fork of [SSnowly/NetworkJS](https://github.com/SSnowly/NetworkJS), extended with **PostgreSQL** (HikariCP pool, async queries).
 
 Repository: [UNFOX2/NetworkJS-Reloaded](https://github.com/UNFOX2/NetworkJS-Reloaded)
+
+### Compatible versions
+
+| Component | Minimum version | Built / tested with |
+|-----------|-----------------|---------------------|
+| **Minecraft** | 1.21.1 | 1.21.1 |
+| **NeoForge** | **21.1.200** | 21.1.200 |
+| **KubeJS** | **2101.7.1** | 2101.7.1-build.181 |
+| **NetworkJS Reloaded** | — | **1.2.0** |
+| **Java** | 21 | 21 |
+
+> Only **NeoForge 1.21.1** (`21.1.x`). Not compatible with Forge, Fabric, or other Minecraft versions.
 
 ---
 
@@ -21,22 +33,16 @@ Repository: [UNFOX2/NetworkJS-Reloaded](https://github.com/UNFOX2/NetworkJS-Relo
 | **Server** | `Server.sendRawMessage`, player list, player count |
 | **Safety** | Registry off in singleplayer by default; dedicated server enables automatically |
 
-### Real-world example in this repo
-
-**[SkyCore](skycore/)** — full server stack on top of NetworkJS + PostgreSQL:
-
-- Users, roles, sessions
-- Local/global chat with role prefixes
-- Homes, regions, spawn, permissions
-- SQL migrations in `skycore/sql/`
-
 ---
 
 ## Requirements
 
-- Minecraft **1.21.1**
-- NeoForge **21.1.200+**
-- KubeJS **2101.7.1+**
+Same as the table above:
+
+- Minecraft **1.21.1** (exact)
+- NeoForge **21.1.200** or newer on the `21.1` line
+- KubeJS **2101.7.1** or newer (`2101.7.1-build.181` in dev)
+- **Java 21** (bundled with Minecraft 1.21.1)
 
 ## Installation
 
@@ -151,8 +157,7 @@ examples/kubejs/
 ├── config/networkjs/postgres.json.example
 ├── server_scripts/
 │   ├── networkjs_http_fetch_example.js
-│   ├── networkjs_postgres_example.js
-│   └── networkjs_skyforce_profile_test.js   # HTTP + external API (SkyForce)
+│   └── networkjs_postgres_example.js
 └── postgres/README.md
 ```
 
@@ -177,4 +182,4 @@ MIT — see [LICENSE](LICENSE).
 ## Credits
 
 - Original mod: [SSnowly/NetworkJS](https://github.com/SSnowly/NetworkJS)
-- Reloaded fork: [UNFOX2](https://github.com/UNFOX2) — PostgreSQL, docs, SkyCore examples
+- Reloaded fork: [UNFOX2](https://github.com/UNFOX2) — PostgreSQL, bilingual docs, KubeJS examples

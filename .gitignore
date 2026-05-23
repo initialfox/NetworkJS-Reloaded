@@ -28,3 +28,6 @@ repo
 # secrets — never commit real DB credentials
 **/kubejs/config/networkjs/postgres.json
 postgres.json
+
+# local server scripts pack (not part of the mod repo)
+skycore/
