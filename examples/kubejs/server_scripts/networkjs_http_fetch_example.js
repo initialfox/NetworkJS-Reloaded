@@ -22,12 +22,12 @@ PlayerEvents.loggedIn(function (event) {
   var name = String(event.player.username)
 
   try {
-    var response = fetch('https://api.github.com/repos/UNFOX2/NetworkJS-Reloaded')
+    var response = fetch('https://api.github.com/repos/initialfox/NetworkJS-Reloaded')
     if (response.isOk()) {
       var json = response.json()
       var stars = json.stargazers_count != null ? json.stargazers_count : '?'
       event.server.scheduleInTicks(0, function () {
-        Server.sendRawMessageToPlayer(name, '&a[HTTP] &7NetworkJS-Reloaded stars: &e' + stars)
+        Server.sendRawMessageToPlayer(name, '&a[HTTP] &7NetworkJS Reloaded stars: &e' + stars)
       })
     }
   } catch (e) {

@@ -1,80 +1,80 @@
 # NetworkJS Reloaded
 
-[Русская версия](README.ru.md)
+[English version](README.en.md)
 
-KubeJS addon for **Minecraft 1.21.1 + NeoForge**: HTTP requests, Discord bot, PostgreSQL, and server utilities — directly from your `kubejs/server_scripts`.
+Аддон **KubeJS** для **Minecraft 1.21.1 + NeoForge**: HTTP-запросы, Discord-бот, **PostgreSQL** и утилиты сервера — прямо из `kubejs/server_scripts`.
 
-Fork of [SSnowly/NetworkJS](https://github.com/SSnowly/NetworkJS), extended with **PostgreSQL** (HikariCP pool, async queries).
+Форк [SSnowly/NetworkJS](https://github.com/SSnowly/NetworkJS) с добавлением **PostgreSQL** (пул HikariCP, асинхронные запросы).
 
-Repository: [UNFOX2/NetworkJS-Reloaded](https://github.com/UNFOX2/NetworkJS-Reloaded)
+Репозиторий: [initialfox/NetworkJS-Reloaded](https://github.com/initialfox/NetworkJS-Reloaded)
 
-### Compatible versions
+### Совместимые версии
 
-| Component | Minimum version | Built / tested with |
-|-----------|-----------------|---------------------|
+| Компонент | Минимум | Собрано / проверено на |
+|-----------|---------|------------------------|
 | **Minecraft** | 1.21.1 | 1.21.1 |
 | **NeoForge** | **21.1.200** | 21.1.200 |
 | **KubeJS** | **2101.7.1** | 2101.7.1-build.181 |
 | **NetworkJS Reloaded** | — | **1.2.0** |
 | **Java** | 21 | 21 |
 
-> Only **NeoForge 1.21.1** (`21.1.x`). Not compatible with Forge, Fabric, or other Minecraft versions.
+> Только **NeoForge 1.21.1** (ветка `21.1.x`). Не работает с Forge, Fabric и другими версиями Minecraft.
 
 ---
 
-## What it can do
+## Возможности
 
-| Area | Capability |
-|------|------------|
-| **HTTP** | `fetch` / `fetchAsync` — GET/POST, headers, JSON body (OkHttp) |
-| **PostgreSQL** | `postgresQuery` / `postgresExecute`, `Postgres.*` — prepared statements, async, connection pool |
-| **Discord** | `DiscordBot` — messages, embeds, inbound events |
-| **KubeJS** | Global bindings + classes, works with `PlayerEvents`, `ServerEvents`, commands |
-| **Server** | `Server.sendRawMessage`, player list, player count |
-| **Safety** | Registry off in singleplayer by default; dedicated server enables automatically |
-
----
-
-## Requirements
-
-Same as the table above:
-
-- Minecraft **1.21.1** (exact)
-- NeoForge **21.1.200** or newer on the `21.1` line
-- KubeJS **2101.7.1** or newer (`2101.7.1-build.181` in dev)
-- **Java 21** (bundled with Minecraft 1.21.1)
-
-## Installation
-
-1. Build or download the JAR (`build/libs/networkjs-1.21.1-*.jar`).
-2. Put it in `mods/` together with **KubeJS**.
-3. Restart the server.
-4. **Singleplayer:** run `/networkjs enable`, then `/kubejs reload server`.
-5. **Dedicated:** registry is enabled automatically.
-
-## Safety & commands
-
-| Command | Description |
-|---------|-------------|
-| `/networkjs enable` | Enable bindings + reload KubeJS (OP 2) |
-| `/networkjs disable` | Disable network access |
-| `/networkjs reload` | Reload bindings |
-| `/networkjs status` | Registry + PostgreSQL status |
-| `/networkjs postgres reload` | Reload DB config |
-| `/networkjs postgres status` | DB connection details |
+| Область | Что умеет |
+|---------|-----------|
+| **HTTP** | `fetch` / `fetchAsync` — GET/POST, заголовки, JSON-тело (OkHttp) |
+| **PostgreSQL** | `postgresQuery` / `postgresExecute`, класс `Postgres` — prepared statements, async, пул соединений |
+| **Discord** | `DiscordBot` — сообщения, embeds, входящие события |
+| **KubeJS** | Глобальные функции и классы, `PlayerEvents`, `ServerEvents`, команды |
+| **Сервер** | `Server.sendRawMessage`, список игроков, количество онлайн |
+| **Безопасность** | В одиночке реестр выключен; на dedicated включается сам |
 
 ---
 
-## Quick start
+## Требования
+
+Как в таблице выше:
+
+- Minecraft **1.21.1** (строго)
+- NeoForge **21.1.200** и новее в линейке `21.1`
+- KubeJS **2101.7.1** и новее (в разработке: `2101.7.1-build.181`)
+- **Java 21** (идёт с Minecraft 1.21.1)
+
+## Установка
+
+1. Соберите или скачайте JAR (`build/libs/networkjs-1.21.1-*.jar`).
+2. Положите в `mods/` вместе с **KubeJS**.
+3. Перезапустите сервер.
+4. **Одиночка:** `/networkjs enable`, затем `/kubejs reload server`.
+5. **Dedicated:** реестр включается автоматически.
+
+## Команды и безопасность
+
+| Команда | Описание |
+|---------|----------|
+| `/networkjs enable` | Включить биндинги + перезагрузка KubeJS (OP 2) |
+| `/networkjs disable` | Отключить сеть |
+| `/networkjs reload` | Перезагрузить биндинги |
+| `/networkjs status` | Статус реестра и PostgreSQL |
+| `/networkjs postgres reload` | Перечитать конфиг БД |
+| `/networkjs postgres status` | Подключение к БД |
+
+---
+
+## Быстрый старт
 
 ### HTTP
 
 ```javascript
-// Sync
+// Синхронно
 const response = fetch('https://api.example.com/data')
 console.log(response.getStatus(), response.text())
 
-// Async
+// Асинхронно
 fetchAsync('https://api.example.com', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
@@ -82,15 +82,15 @@ fetchAsync('https://api.example.com', {
 }).thenAccept(r => console.log(r.text()))
 ```
 
-See: [`examples/kubejs/server_scripts/networkjs_http_fetch_example.js`](examples/kubejs/server_scripts/networkjs_http_fetch_example.js)
+Пример: [`examples/kubejs/server_scripts/networkjs_http_fetch_example.js`](examples/kubejs/server_scripts/networkjs_http_fetch_example.js)
 
 ### PostgreSQL
 
-1. Copy [`examples/kubejs/config/networkjs/postgres.json.example`](examples/kubejs/config/networkjs/postgres.json.example)  
+1. Скопируйте [`examples/kubejs/config/networkjs/postgres.json.example`](examples/kubejs/config/networkjs/postgres.json.example)  
    → `kubejs/config/networkjs/postgres.json`
-2. Set `"enabled": true`, host, database, credentials.
+2. Укажите `"enabled": true`, хост, БД, логин/пароль.
 3. `/networkjs postgres reload`
-4. Use in scripts:
+4. В скриптах:
 
 ```javascript
 postgresQuery('SELECT role FROM users WHERE username = ?', [playerName])
@@ -98,15 +98,15 @@ postgresQuery('SELECT role FROM users WHERE username = ?', [playerName])
     event.server.scheduleInTicks(0, function () {
       if (!result.isOk()) return
       var role = result.getRows().get(0).get('role')
-      Server.sendRawMessageToPlayer(playerName, '&aRole: &e' + role)
+      Server.sendRawMessageToPlayer(playerName, '&aРоль: &e' + role)
     })
   })
 ```
 
-See: [`examples/kubejs/server_scripts/networkjs_postgres_example.js`](examples/kubejs/server_scripts/networkjs_postgres_example.js)  
-Docs: [`examples/kubejs/postgres/README.md`](examples/kubejs/postgres/README.md)
+Пример: [`examples/kubejs/server_scripts/networkjs_postgres_example.js`](examples/kubejs/server_scripts/networkjs_postgres_example.js)  
+Подробнее: [`examples/kubejs/postgres/README.md`](examples/kubejs/postgres/README.md)
 
-> **Important:** `thenAccept` runs off the main thread — use `server.scheduleInTicks(0, ...)` before chat/world changes.
+> **Важно:** колбэк `thenAccept` выполняется не в тике сервера — для чата/мира используйте `server.scheduleInTicks(0, ...)`.
 
 ### Discord
 
@@ -118,7 +118,7 @@ const bot = new DiscordBot({
   sanitizeMessages: true
 })
 
-bot.sendMessage('chat', 'Hello from Minecraft!')
+bot.sendMessage('chat', 'Привет с сервера!')
 bot.onMessage(function (msg) {
   if (msg.isFromConfiguredChannel() && !msg.isBot()) {
     Server.sendRawMessage('&7[Discord] &f' + msg.getAuthor() + ': ' + msg.getContent())
@@ -128,58 +128,56 @@ bot.onMessage(function (msg) {
 
 ---
 
-## KubeJS API reference
+## API для KubeJS
 
-| Export | Type | Description |
-|--------|------|-------------|
-| `fetch(url, options?)` | Function | Sync HTTP |
-| `fetchAsync(url, options?)` | Function | Async HTTP → `CompletableFuture<FetchResponse>` |
-| `postgresQuery(sql, params?)` | Function | SELECT (async) |
-| `postgresExecute(sql, params?)` | Function | INSERT/UPDATE/DELETE (async) |
-| `FetchBinding` | Class | HTTP (legacy class API) |
-| `FetchOptions` | Class | Request options |
-| `FetchResponse` | Class | Response (`getStatus`, `text`, `json`, `isOk`) |
-| `Postgres` | Class | `query`, `execute`, `*Async`, `isConnected`, `reload` |
-| `PostgresResult` | Class | `isOk`, `getRows`, `getRowCount`, `getError`, `getUpdateCount` |
-| `DiscordBot` | Class | Discord integration |
-| `Server` | Class | `sendRawMessage`, `sendRawMessageToPlayer`, `getPlayerCount`, `getPlayerNames` |
+| Экспорт | Тип | Описание |
+|---------|-----|----------|
+| `fetch(url, options?)` | Функция | Синхронный HTTP |
+| `fetchAsync(url, options?)` | Функция | Асинхронный HTTP |
+| `postgresQuery(sql, params?)` | Функция | SELECT (async) |
+| `postgresExecute(sql, params?)` | Функция | INSERT/UPDATE/DELETE (async) |
+| `FetchBinding` | Класс | HTTP (классовый API) |
+| `FetchOptions` | Класс | Параметры запроса |
+| `FetchResponse` | Класс | Ответ |
+| `Postgres` | Класс | `query`, `execute`, `*Async`, `isConnected`, `reload` |
+| `PostgresResult` | Класс | `isOk`, `getRows`, `getRowCount`, `getError` |
+| `DiscordBot` | Класс | Discord |
+| `Server` | Класс | Сообщения и информация о сервере |
 
-`options` for fetch: `{ method, headers, body }`.
-
-SQL params: JavaScript array for `?` placeholders (JDBC prepared statements).
+Параметры SQL — массив для плейсхолдеров `?`. Не склеивайте SQL из чата игрока.
 
 ---
 
-## Examples folder
+## Примеры
 
 ```
 examples/kubejs/
 ├── config/networkjs/postgres.json.example
 ├── server_scripts/
-│   ├── networkjs_http_fetch_example.js
-│   └── networkjs_postgres_example.js
+│   ├── networkjs_http_fetch_example.js      # HTTP
+│   └── networkjs_postgres_example.js        # PostgreSQL
 └── postgres/README.md
 ```
 
-Copy scripts into `<world>/kubejs/server_scripts/` on your server.
+Скопируйте `.js` в `<мир>/kubejs/server_scripts/`.
 
 ---
 
-## Building
+## Сборка
 
 ```bash
-git clone https://github.com/UNFOX2/NetworkJS-Reloaded.git
+git clone https://github.com/initialfox/NetworkJS-Reloaded.git
 cd NetworkJS-Reloaded
 ./gradlew build
 ```
 
-Output: `build/libs/networkjs-1.21.1-1.2.0.jar`
+Результат: `build/libs/networkjs-1.21.1-1.2.0.jar`
 
-## License
+## Лицензия
 
-MIT — see [LICENSE](LICENSE).
+MIT — см. [LICENSE](LICENSE).
 
-## Credits
+## Авторы
 
-- Original mod: [SSnowly/NetworkJS](https://github.com/SSnowly/NetworkJS)
-- Reloaded fork: [UNFOX2](https://github.com/UNFOX2) — PostgreSQL, bilingual docs, KubeJS examples
+- Оригинал: [SSnowly/NetworkJS](https://github.com/SSnowly/NetworkJS)
+- Reloaded: [initialfox](https://github.com/initialfox) — PostgreSQL, документация RU/EN, примеры KubeJS

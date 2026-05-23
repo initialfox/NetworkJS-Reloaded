@@ -1,17 +1,17 @@
 # NetworkJS — PostgreSQL
 
-PostgreSQL from KubeJS (HikariCP pool, async queries).
+[English version](README.en.md)
 
-[Русская версия](README.ru.md)
+Подключение к PostgreSQL из KubeJS (пул HikariCP, асинхронные запросы).
 
 ## Установка
 
-1. Скопируй `config/networkjs/postgres.json.example` → `kubejs/config/networkjs/postgres.json`
-2. Укажи `host`, `database`, `username`, `password`, `"enabled": true`
-3. Перезапусти сервер или `/networkjs postgres reload`
-4. В singleplayer: `/networkjs enable`
+1. Скопируйте `config/networkjs/postgres.json.example` → `kubejs/config/networkjs/postgres.json`
+2. Укажите `host`, `database`, `username`, `password`, `"enabled": true`
+3. Перезапустите сервер или `/networkjs postgres reload`
+4. В одиночке: `/networkjs enable`
 
-## KubeJS API
+## API
 
 | Имя | Описание |
 |-----|----------|
@@ -20,8 +20,7 @@ PostgreSQL from KubeJS (HikariCP pool, async queries).
 | `Postgres.query` / `queryAsync` | То же через класс |
 | `Postgres.execute` / `executeAsync` | Запись |
 | `Postgres.isConnected()` | Проверка пула |
-
-Параметры — массив для `?` в SQL:
+| `Postgres.reload()` | Переподключение |
 
 ```javascript
 postgresQuery('SELECT * FROM users WHERE uuid = ?', [uuid]).thenAccept(function (result) {
@@ -32,15 +31,15 @@ postgresQuery('SELECT * FROM users WHERE uuid = ?', [uuid]).thenAccept(function 
 })
 ```
 
-**Важно:** колбэк `thenAccept` выполняется в фоне — для чата/мира используй `server.scheduleInTicks(0, ...)`.
+Для чата/мира после async: `server.scheduleInTicks(0, ...)`.
 
 ## Команды
 
-- `/networkjs postgres reload` — перечитать конфиг и переподключиться
-- `/networkjs postgres status` — статус подключения
-- `/networkjs status` — реестр + postgres
+- `/networkjs postgres reload`
+- `/networkjs postgres status`
+- `/networkjs status`
 
 ## Безопасность
 
-- Не коммить `postgres.json` с паролем в git
-- Используй только `?` (prepared statements), не склеивай SQL из чата игрока
+- Не коммитьте `postgres.json` с паролем
+- Только `?` (prepared statements), не конкатенируйте SQL из ввода игрока
