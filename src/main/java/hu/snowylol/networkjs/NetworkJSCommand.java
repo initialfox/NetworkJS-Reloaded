@@ -1,11 +1,10 @@
 package hu.snowylol.networkjs;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
+import hu.snowylol.networkjs.postgres.PostgresManager;
 
 public class NetworkJSCommand {
     
@@ -52,12 +51,40 @@ public class NetworkJSCommand {
                 .executes(context -> {
                     CommandSourceStack source = context.getSource();
                     boolean enabled = NetworkJS.isRegistryEnabled();
-                    String status = enabled ? "enabled" : "disabled";
-                    String color = enabled ? "&a" : "&c";
-                    
-                    source.sendSuccess(() -> Component.literal(color + "[NetworkJS] Registry is currently " + status), false);
+                    String registryStatus = enabled ? "enabled" : "disabled";
+                    String postgresStatus = PostgresManager.isEnabled() ? "connected" : "disconnected";
+
+                    source.sendSuccess(() -> Component.literal(
+                            "[NetworkJS] Registry: " + registryStatus + ", PostgreSQL: " + postgresStatus
+                    ), false);
                     return 1;
                 }))
+            .then(Commands.literal("postgres")
+                .then(Commands.literal("reload")
+                    .executes(context -> {
+                        CommandSourceStack source = context.getSource();
+                        PostgresManager.reload();
+                        String msg = PostgresManager.isEnabled()
+                                ? "PostgreSQL reloaded and connected."
+                                : "PostgreSQL reload finished (not connected — check kubejs/config/networkjs/postgres.json).";
+                        source.sendSuccess(() -> Component.literal(msg), true);
+                        return 1;
+                    }))
+                .then(Commands.literal("status")
+                    .executes(context -> {
+                        CommandSourceStack source = context.getSource();
+                        if (PostgresManager.isEnabled()) {
+                            var cfg = PostgresManager.getConfig();
+                            source.sendSuccess(() -> Component.literal(
+                                    "PostgreSQL OK: " + cfg.host + ":" + cfg.port + "/" + cfg.database
+                            ), false);
+                        } else {
+                            source.sendFailure(Component.literal(
+                                    "PostgreSQL not connected. Config: " + PostgresManager.getConfigPath()
+                            ));
+                        }
+                        return 1;
+                    })))
         );
     }
 }

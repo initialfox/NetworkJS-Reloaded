@@ -1,221 +1,180 @@
-# NetworkJS
+# NetworkJS Reloaded
 
-A powerful KubeJS addon that enables internet connectivity and Discord integration for your Minecraft server scripts.
+[Русская версия](README.ru.md)
 
-> **Note**: This is my first Java mod! I'm still learning, so feedback and contributions are very welcome. :D
+KubeJS addon for **NeoForge 1.21.1**: HTTP requests, Discord bot, PostgreSQL, and server utilities — directly from your `kubejs/server_scripts`.
 
-## Features
+Fork of [SSnowly/NetworkJS](https://github.com/SSnowly/NetworkJS), extended with **PostgreSQL** (HikariCP pool, async queries).
 
-- **HTTP/FETCH Support** - Make HTTP requests from your KubeJS scripts
-- **Discord Bot Integration** - Send messages, embeds, and listen to Discord events
-- **Server Utilities** - Send colored messages to players and get server info
-- **Easy Integration** - Works seamlessly with KubeJS with both global functions and class access
-- **Safety System** - Registry system prevents accidental network access in singleplayer
+Repository: [UNFOX2/NetworkJS-Reloaded](https://github.com/UNFOX2/NetworkJS-Reloaded)
 
-## Installation
+---
 
-1. Download the latest jar from the [releases page](https://github.com/SSnowly/NetworkJS/releases)
-2. Place the jar in your `mods` folder
-3. Make sure you have [KubeJS](https://github.com/KubeJS-Mods/KubeJS) installed
-4. Restart your server
+## What it can do
 
-## Safety & Registry System
+| Area | Capability |
+|------|------------|
+| **HTTP** | `fetch` / `fetchAsync` — GET/POST, headers, JSON body (OkHttp) |
+| **PostgreSQL** | `postgresQuery` / `postgresExecute`, `Postgres.*` — prepared statements, async, connection pool |
+| **Discord** | `DiscordBot` — messages, embeds, inbound events |
+| **KubeJS** | Global bindings + classes, works with `PlayerEvents`, `ServerEvents`, commands |
+| **Server** | `Server.sendRawMessage`, player list, player count |
+| **Safety** | Registry off in singleplayer by default; dedicated server enables automatically |
 
-NetworkJS includes a safety system to prevent accidental network access:
+### Real-world example in this repo
 
-### Singleplayer Detection
-- When running in singleplayer mode, NetworkJS automatically disables all network features
-- A warning message appears in chat explaining how to enable the registry
-- This prevents accidental API calls or Discord connections in singleplayer
+**[SkyCore](skycore/)** — full server stack on top of NetworkJS + PostgreSQL:
 
-### Registry Commands
-Use these commands to manage the NetworkJS registry (requires OP level 2):
+- Users, roles, sessions
+- Local/global chat with role prefixes
+- Homes, regions, spawn, permissions
+- SQL migrations in `skycore/sql/`
 
-```bash
-/networkjs enable    # Enable the registry and reload KubeJS scripts
-/networkjs disable   # Disable the registry
-/networkjs reload    # Force reload bindings (when registry is enabled)
-/networkjs status    # Check current registry status
-```
-
-### Workflow
-1. **Server starts** → Registry is disabled by default in singleplayer
-2. **Warning appears** → Chat message explains the situation
-3. **Run command** → `/networkjs enable` to enable features
-4. **Scripts reload** → KubeJS server-scripts reload with new bindings
-5. **Features available** → All NetworkJS features are now accessible
-
-## API Reference
-
-### Global Functions (New!)
-
-```javascript
-// HTTP Requests - Now available as global functions!
-fetch('https://api.example.com/data')
-fetchAsync('https://api.example.com/data', { 
-    method: 'POST', 
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ key: 'value' })
-})
-```
-
-### Global Classes
-
-#### `DiscordBot` - Discord Integration
-```javascript
-const config = {
-    token: "your-bot-token",
-    guild: "your-guild-id", 
-    channels: {
-        chat: "channel-id",
-        announcements: "channel-id"
-    },
-    sanitizeMessages: true
-};
-
-const bot = new DiscordBot(config);
-
-// Send messages
-bot.sendMessage("chat", "Hello from Minecraft!");
-
-// Send embeds
-bot.sendEmbed("announcements", {
-    title: "Server Status",
-    description: "Server is online!",
-    color: 0x00ff00
-});
-
-// Listen for Discord messages
-bot.onMessage(function(discordMessage) {
-    console.log("Message from " + discordMessage.getAuthor() + ": " + discordMessage.getContent());
-});
-
-// Set bot activity
-bot.setActivity("Minecraft Server Online");
-```
-
-#### `Server` - Minecraft Server Utilities
-```javascript
-// Send colored messages to all players
-Server.sendRawMessage("&aWelcome to the server!");
-
-// Send message to specific player
-Server.sendRawMessageToPlayer("PlayerName", "&bHello there!");
-
-// Get server info
-const playerCount = Server.getPlayerCount();
-const playerNames = Server.getPlayerNames(); // Returns array of strings
-```
-
-#### `FetchBinding` - HTTP Requests (Legacy)
-```javascript
-// You can still use the class-based approach
-const response = FetchBinding.fetch("https://api.example.com");
-console.log("Status:", response.getStatus());
-console.log("Response:", response.text());
-
-// With options
-const options = new FetchOptions("POST", {"Content-Type": "application/json"}, '{"data": "value"}');
-const response = FetchBinding.fetch("https://api.example.com", options);
-
-// Async requests
-const futureResponse = FetchBinding.fetchAsync("https://api.example.com");
-```
-
-### Complete API Exports
-
-The following classes and functions are available globally in your KubeJS scripts (when registry is enabled):
-
-| Export | Type | Description |
-|--------|------|-------------|
-| `fetch()` | Function | Make HTTP requests (global function) |
-| `fetchAsync()` | Function | Make async HTTP requests (global function) |
-| `DiscordBot` | Class | Discord bot functionality |
-| `Server` | Class | Server utilities |
-| `FetchBinding` | Class | HTTP request utilities (legacy) |
-| `FetchOptions` | Class | HTTP request options |
-| `FetchResponse` | Class | HTTP response object |
-
-## Example Usage
-
-### Discord-Minecraft Bridge
-```javascript
-const discordConfig = {
-    token: "your-bot-token",
-    guild: "your-guild-id",
-    channels: { chat: "chat-channel-id" }
-};
-
-const bot = new DiscordBot(discordConfig);
-
-// Relay Discord messages to Minecraft
-bot.onMessage(function(msg) {
-    if (msg.isFromConfiguredChannel() && !msg.isBot()) {
-        Server.sendRawMessage(`&7[Discord] &f${msg.getAuthor()}: ${msg.getContent()}`);
-    }
-});
-
-// Relay Minecraft chat to Discord
-PlayerEvents.chat(event => {
-    const playerName = event.player.name.getString();
-    const message = event.message;
-    bot.sendMessage("chat", `**${playerName}**: ${message}`);
-});
-```
-
-### Server Status API
-```javascript
-// Create a simple API endpoint using fetch
-ServerEvents.loaded(event => {
-    const statusData = {
-        online: true,
-        players: Server.getPlayerCount(),
-        playerList: Server.getPlayerNames()
-    };
-    
-    // Post to your status API
-    fetchAsync('https://your-api.com/server-status', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(statusData)
-    });
-});
-```
+---
 
 ## Requirements
 
-- Minecraft 1.21.1
-- NeoForge 21.1.200+
-- KubeJS 2101.7.1+
+- Minecraft **1.21.1**
+- NeoForge **21.1.200+**
+- KubeJS **2101.7.1+**
+
+## Installation
+
+1. Build or download the JAR (`build/libs/networkjs-1.21.1-*.jar`).
+2. Put it in `mods/` together with **KubeJS**.
+3. Restart the server.
+4. **Singleplayer:** run `/networkjs enable`, then `/kubejs reload server`.
+5. **Dedicated:** registry is enabled automatically.
+
+## Safety & commands
+
+| Command | Description |
+|---------|-------------|
+| `/networkjs enable` | Enable bindings + reload KubeJS (OP 2) |
+| `/networkjs disable` | Disable network access |
+| `/networkjs reload` | Reload bindings |
+| `/networkjs status` | Registry + PostgreSQL status |
+| `/networkjs postgres reload` | Reload DB config |
+| `/networkjs postgres status` | DB connection details |
+
+---
+
+## Quick start
+
+### HTTP
+
+```javascript
+// Sync
+const response = fetch('https://api.example.com/data')
+console.log(response.getStatus(), response.text())
+
+// Async
+fetchAsync('https://api.example.com', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ online: true })
+}).thenAccept(r => console.log(r.text()))
+```
+
+See: [`examples/kubejs/server_scripts/networkjs_http_fetch_example.js`](examples/kubejs/server_scripts/networkjs_http_fetch_example.js)
+
+### PostgreSQL
+
+1. Copy [`examples/kubejs/config/networkjs/postgres.json.example`](examples/kubejs/config/networkjs/postgres.json.example)  
+   → `kubejs/config/networkjs/postgres.json`
+2. Set `"enabled": true`, host, database, credentials.
+3. `/networkjs postgres reload`
+4. Use in scripts:
+
+```javascript
+postgresQuery('SELECT role FROM users WHERE username = ?', [playerName])
+  .thenAccept(function (result) {
+    event.server.scheduleInTicks(0, function () {
+      if (!result.isOk()) return
+      var role = result.getRows().get(0).get('role')
+      Server.sendRawMessageToPlayer(playerName, '&aRole: &e' + role)
+    })
+  })
+```
+
+See: [`examples/kubejs/server_scripts/networkjs_postgres_example.js`](examples/kubejs/server_scripts/networkjs_postgres_example.js)  
+Docs: [`examples/kubejs/postgres/README.md`](examples/kubejs/postgres/README.md)
+
+> **Important:** `thenAccept` runs off the main thread — use `server.scheduleInTicks(0, ...)` before chat/world changes.
+
+### Discord
+
+```javascript
+const bot = new DiscordBot({
+  token: 'BOT_TOKEN',
+  guild: 'GUILD_ID',
+  channels: { chat: 'CHANNEL_ID' },
+  sanitizeMessages: true
+})
+
+bot.sendMessage('chat', 'Hello from Minecraft!')
+bot.onMessage(function (msg) {
+  if (msg.isFromConfiguredChannel() && !msg.isBot()) {
+    Server.sendRawMessage('&7[Discord] &f' + msg.getAuthor() + ': ' + msg.getContent())
+  }
+})
+```
+
+---
+
+## KubeJS API reference
+
+| Export | Type | Description |
+|--------|------|-------------|
+| `fetch(url, options?)` | Function | Sync HTTP |
+| `fetchAsync(url, options?)` | Function | Async HTTP → `CompletableFuture<FetchResponse>` |
+| `postgresQuery(sql, params?)` | Function | SELECT (async) |
+| `postgresExecute(sql, params?)` | Function | INSERT/UPDATE/DELETE (async) |
+| `FetchBinding` | Class | HTTP (legacy class API) |
+| `FetchOptions` | Class | Request options |
+| `FetchResponse` | Class | Response (`getStatus`, `text`, `json`, `isOk`) |
+| `Postgres` | Class | `query`, `execute`, `*Async`, `isConnected`, `reload` |
+| `PostgresResult` | Class | `isOk`, `getRows`, `getRowCount`, `getError`, `getUpdateCount` |
+| `DiscordBot` | Class | Discord integration |
+| `Server` | Class | `sendRawMessage`, `sendRawMessageToPlayer`, `getPlayerCount`, `getPlayerNames` |
+
+`options` for fetch: `{ method, headers, body }`.
+
+SQL params: JavaScript array for `?` placeholders (JDBC prepared statements).
+
+---
+
+## Examples folder
+
+```
+examples/kubejs/
+├── config/networkjs/postgres.json.example
+├── server_scripts/
+│   ├── networkjs_http_fetch_example.js
+│   ├── networkjs_postgres_example.js
+│   └── networkjs_skyforce_profile_test.js   # HTTP + external API (SkyForce)
+└── postgres/README.md
+```
+
+Copy scripts into `<world>/kubejs/server_scripts/` on your server.
+
+---
 
 ## Building
 
 ```bash
-git clone https://github.com/SSnowly/NetworkJS.git
-cd NetworkJS
+git clone https://github.com/UNFOX2/NetworkJS-Reloaded.git
+cd NetworkJS-Reloaded
 ./gradlew build
 ```
 
-The built jar will be in `build/libs/networkjs-1.21.1-{version}.jar`
+Output: `build/libs/networkjs-1.21.1-1.2.0.jar`
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT — see [LICENSE](LICENSE).
 
-## Contributing
+## Credits
 
-As a new Java developer, I'm always looking to improve! Feel free to:
-
-- Open issues for bugs or feature requests
-- Submit pull requests with improvements
-- Share feedback on the code structure
-- Help with documentation
-
-## Support
-
-- Open an [issue](https://github.com/SSnowly/NetworkJS/issues) for bugs
-- Check the [KubeJS Wiki](https://kubejs.com/) for general KubeJS help
-
----
-
-Made with <3 by ME!
+- Original mod: [SSnowly/NetworkJS](https://github.com/SSnowly/NetworkJS)
+- Reloaded fork: [UNFOX2](https://github.com/UNFOX2) — PostgreSQL, docs, SkyCore examples

@@ -7,6 +7,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
+import hu.snowylol.networkjs.postgres.PostgresManager;
 
 @Mod(NetworkJS.MODID)
 public class NetworkJSNeoForge {
@@ -27,9 +28,11 @@ public class NetworkJSNeoForge {
         NetworkJS.LOGGER.info("Server starting - NetworkJS ready");
         // Check for singleplayer and show warning after server is started
         NetworkJS.checkSingleplayerAndWarn();
+        PostgresManager.tryInit();
     }
     
     private void onServerStopping(ServerStoppingEvent event) {
+        PostgresManager.shutdown();
         NetworkJS.disableRegistry();
         NetworkJS.LOGGER.info("Server stopping - NetworkJS registry disabled");
     }

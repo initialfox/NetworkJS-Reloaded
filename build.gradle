@@ -157,6 +157,16 @@ dependencies {
     // Add Apache Commons Collections explicitly since JDA needs it
     shadow("org.apache.commons:commons-collections4:4.4")
 
+    // PostgreSQL (optional KubeJS database bindings)
+    shadow("org.postgresql:postgresql:42.7.4") {
+        exclude group: 'org.slf4j'
+        exclude group: 'org.checkerframework'
+    }
+    shadow("com.zaxxer:HikariCP:5.1.0") {
+        exclude group: 'org.slf4j'
+        exclude group: 'org.checkerframework'
+    }
+
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
     // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
@@ -240,7 +250,15 @@ shadowJar {
     relocate 'com.google.errorprone', 'hu.snowylol.networkjs.libs.errorprone'
     relocate 'com.fasterxml.jackson', 'hu.snowylol.networkjs.libs.jackson'
     relocate 'org.apache.commons.collections4', 'hu.snowylol.networkjs.libs.collections4'
+    relocate 'org.postgresql', 'hu.snowylol.networkjs.libs.postgresql'
+    relocate 'com.zaxxer.hikari', 'hu.snowylol.networkjs.libs.hikari'
     
+    // Do not bundle libraries that other mods already expose (JPMS export clashes)
+    exclude 'org/slf4j/**'
+    exclude 'org/checkerframework/**'
+    // Prevent shaded deps from becoming automatic Java modules
+    exclude '**/module-info.class'
+
     // Exclude some files to reduce size
     exclude 'META-INF/maven/**'
     exclude 'META-INF/*.SF'

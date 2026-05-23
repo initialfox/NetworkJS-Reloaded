@@ -24,3 +24,7 @@ runs
 run-data
 
 repo
+
+# secrets — never commit real DB credentials
+**/kubejs/config/networkjs/postgres.json
+postgres.json
