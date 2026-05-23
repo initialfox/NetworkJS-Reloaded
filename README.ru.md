@@ -2,11 +2,23 @@
 
 [English version](README.md)
 
-Аддон **KubeJS** для **NeoForge 1.21.1**: HTTP-запросы, Discord-бот, **PostgreSQL** и утилиты сервера — прямо из `kubejs/server_scripts`.
+Аддон **KubeJS** для **Minecraft 1.21.1 + NeoForge**: HTTP-запросы, Discord-бот, **PostgreSQL** и утилиты сервера — прямо из `kubejs/server_scripts`.
 
 Форк [SSnowly/NetworkJS](https://github.com/SSnowly/NetworkJS) с добавлением **PostgreSQL** (пул HikariCP, асинхронные запросы).
 
 Репозиторий: [UNFOX2/NetworkJS-Reloaded](https://github.com/UNFOX2/NetworkJS-Reloaded)
+
+### Совместимые версии
+
+| Компонент | Минимум | Собрано / проверено на |
+|-----------|---------|------------------------|
+| **Minecraft** | 1.21.1 | 1.21.1 |
+| **NeoForge** | **21.1.200** | 21.1.200 |
+| **KubeJS** | **2101.7.1** | 2101.7.1-build.181 |
+| **NetworkJS Reloaded** | — | **1.2.0** |
+| **Java** | 21 | 21 |
+
+> Только **NeoForge 1.21.1** (ветка `21.1.x`). Не работает с Forge, Fabric и другими версиями Minecraft.
 
 ---
 
@@ -21,22 +33,16 @@
 | **Сервер** | `Server.sendRawMessage`, список игроков, количество онлайн |
 | **Безопасность** | В одиночке реестр выключен; на dedicated включается сам |
 
-### Живой пример в репозитории
-
-**[SkyCore](skycore/)** — готовый набор скриптов сервера на NetworkJS + PostgreSQL:
-
-- Пользователи, роли, сессии
-- Локальный/глобальный чат с префиксом роли
-- Дома, регионы, спавн, права
-- SQL-миграции в `skycore/sql/`
-
 ---
 
 ## Требования
 
-- Minecraft **1.21.1**
-- NeoForge **21.1.200+**
-- KubeJS **2101.7.1+**
+Как в таблице выше:
+
+- Minecraft **1.21.1** (строго)
+- NeoForge **21.1.200** и новее в линейке `21.1`
+- KubeJS **2101.7.1** и новее (в разработке: `2101.7.1-build.181`)
+- **Java 21** (идёт с Minecraft 1.21.1)
 
 ## Установка
 
@@ -149,8 +155,7 @@ examples/kubejs/
 ├── config/networkjs/postgres.json.example
 ├── server_scripts/
 │   ├── networkjs_http_fetch_example.js      # HTTP
-│   ├── networkjs_postgres_example.js        # PostgreSQL
-│   └── networkjs_skyforce_profile_test.js   # HTTP + внешний API
+│   └── networkjs_postgres_example.js        # PostgreSQL
 └── postgres/README.ru.md
 ```
 
@@ -175,4 +180,4 @@ MIT — см. [LICENSE](LICENSE).
 ## Авторы
 
 - Оригинал: [SSnowly/NetworkJS](https://github.com/SSnowly/NetworkJS)
-- Reloaded: [UNFOX2](https://github.com/UNFOX2) — PostgreSQL, документация, пример SkyCore
+- Reloaded: [UNFOX2](https://github.com/UNFOX2) — PostgreSQL, документация RU/EN, примеры KubeJS
